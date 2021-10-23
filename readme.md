@@ -16,6 +16,23 @@ Today the PM UI is powered by [NuGet V3's package metadata API](https://docs.mic
 
 This makes it difficult for Visual Studio to quickly display packages' latest metadata.
 
+### Data
+
+5,510 unique package IDs (~3.4% of total downloads) are affected by registration. Here are the top 10 affected packages:
+
+Package Id | Versions | Total downloads
+-- | -- | --
+xamarin.rgb | 8,442 | 1,004,138
+lovecalculator | 8,186 | 877,666
+momentum.pm.portalapi | 6,840 | 19,990,722
+momentum.pm.api | 6,155 | 4,155,818
+namegenerator | 5,415 | 507,700
+perseuslibs | 2,985 | 1,674,791
+paket | 2,480 | 3,892,159
+hilma.common | 2,451 | 204,900
+uno.ui | 2,466 | 1,096,205
+paket.core | 2,261 | 3,315,729
+
 ## Performance results
 
 ⚠ TODO
