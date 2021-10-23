@@ -63,7 +63,7 @@ pre-release | [`catalogEntry` object](https://docs.microsoft.com/nuget/api/regis
 #### Sample request
 
 ```
-GET https://api.nuget.org/v3/latest/newtonsoft.json/latest.json
+GET https://loic001.blob.core.windows.net/latest/newtonsoft.json/latest.json
 ```
 
 #### Sample response
@@ -110,7 +110,7 @@ stable | [`catalogEntry` object](https://docs.microsoft.com/nuget/api/registrati
 #### Sample request
 
 ```
-GET https://api.nuget.org/v3/latest/newtonsoft.json/latest-stable.json
+GET https://loic001.blob.core.windows.net/latest/newtonsoft.json/latest-stable.json
 ```
 
 #### Sample response
@@ -152,7 +152,7 @@ prerelease | [`catalogEntry` object](https://docs.microsoft.com/nuget/api/regist
 #### Sample request
 
 ```
-GET https://api.nuget.org/v3/latest/newtonsoft.json/latest-prerelease.json
+GET https://loic001.blob.core.windows.net/latest/newtonsoft.json/latest-prerelease.json
 ```
 
 #### Sample response
