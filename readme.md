@@ -11,10 +11,13 @@ You can use Visual Studio's Package Manager (PM) UI to browse and install packag
 Today the PM UI is powered by [NuGet V3's package metadata API](https://docs.microsoft.com/nuget/api/registration-base-url-resource). This API has a few flaws:
 
 1. It includes the metadata for _all_ versions of a package, not just the latest version.
-1. Packages that with more than 128 versions are split across multiple "pages"
+1. Packages that with more than 128 versions are split across multiple "registration pages"
 1. It includes [unlisted versions](https://docs.microsoft.com/en-us/nuget/nuget-org/policies/deleting-packages), which are hidden from the UI.
 
-This makes it difficult for Visual Studio to quickly display packages' latest metadata.
+This makes it difficult for Visual Studio to quickly display packages' latest metadata. See:
+
+* [NuGet/Home#8058](https://github.com/NuGet/Home/issues/8058)
+* [NuGet/Home#4448](https://github.com/NuGet/Home/issues/4448)
 
 ### Data
 
