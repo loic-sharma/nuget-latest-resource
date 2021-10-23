@@ -6,7 +6,9 @@ Kudos to [@nkolev92](https://github.com/nkolev92) for the idea!
 
 ## Background
 
-Customers use Visual Studio's Package Manager (PM) UI to browse and install packages. The PM UI displays packages' latest version by default. Today Visual Studio does this using [NuGet V3's package metadata API](https://docs.microsoft.com/nuget/api/registration-base-url-resource). This API has a few flaws:
+You can use Visual Studio's Package Manager (PM) UI to browse and install packages. By default, the PM UI displays packages' latest version.
+
+Today the PM UI is powered by [NuGet V3's package metadata API](https://docs.microsoft.com/nuget/api/registration-base-url-resource). This API has a few flaws:
 
 1. It includes the metadata for all versions of a package.
 1. Packages that with more than 128 versions are split across multiple "pages"
