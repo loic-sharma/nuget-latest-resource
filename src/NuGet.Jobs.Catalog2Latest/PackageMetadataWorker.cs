@@ -49,7 +49,7 @@ namespace NuGet.Jobs.Catalog2Latest
             var client = _factory.CreatePackageMetadataClient();
 
             _logger.LogInformation(
-                "Indexing package metadata to using {ConsumerWorkers} workers...",
+                "Indexing package metadata using {ConsumerWorkers} workers...",
                 _options.Value.ConsumerWorkers);
 
             // TODO: Upgrade to .NET 6 -> Parallel.ForEachAsync
