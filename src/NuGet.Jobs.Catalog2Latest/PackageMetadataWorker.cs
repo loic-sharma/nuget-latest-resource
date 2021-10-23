@@ -70,15 +70,23 @@ namespace NuGet.Jobs.Catalog2Latest
                                 {
                                     _logger.LogDebug("Processing package {PackageId}...", packageId);
 
+                                    var path = packageId.ToLowerInvariant();
                                     var index = await GetInlinedRegistrationIndexOrNullAsync(client, packageId, cancellationToken);
                                     if (index != null)
                                     {
                                         var latestResponses = BuildLatestResponses(index);
-                                        var path = packageId.ToLowerInvariant();
 
+                                        await WriteJsonAsync(path, "index", index, cancellationToken);
                                         await WriteJsonAsync(path, "latest", latestResponses.Latest, cancellationToken);
                                         await WriteJsonAsync(path, "latest-stable", latestResponses.LatestStable, cancellationToken);
                                         await WriteJsonAsync(path, "latest-prerelease", latestResponses.LatestPrerelease, cancellationToken);
+                                    }
+                                    else
+                                    {
+                                        await DeleteJsonAsync(path, "index", cancellationToken);
+                                        await DeleteJsonAsync(path, "latest", cancellationToken);
+                                        await DeleteJsonAsync(path, "latest-stable", cancellationToken);
+                                        await DeleteJsonAsync(path, "latest-prerelease", cancellationToken);
                                     }
 
                                     done = true;
@@ -157,10 +165,10 @@ namespace NuGet.Jobs.Catalog2Latest
                 LatestPrerelease: new() { Stable = null, Prerelease = prerelease });
         }
         
-        private async Task WriteJsonAsync(
+        private async Task WriteJsonAsync<TContent>(
             string directory,
             string fileName,
-            LatestResponse content,
+            TContent content,
             CancellationToken cancellationToken)
         {
             var name = Path.Combine(directory, fileName + ".json");
@@ -181,6 +189,17 @@ namespace NuGet.Jobs.Catalog2Latest
 
             stream.Position = 0;
             await blob.UploadAsync(stream, headers, cancellationToken: cancellationToken);
+        }
+
+        private async Task DeleteJsonAsync(
+            string directory,
+            string fileName,
+            CancellationToken cancellationToken)
+        {
+            var name = Path.Combine(directory, fileName + ".json");
+            var blob = _blobContainer.GetBlobClient(name);
+
+            await blob.DeleteIfExistsAsync(cancellationToken: cancellationToken);
         }
 
         private record LatestResponses(
