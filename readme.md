@@ -2,21 +2,6 @@
 
 This prototypes the NuGet V3 "latest" resource to power Visual Studio's "Updates" tab in the Package Manager UI.
 
-## SDK Sample
-
-```cs
-using var http = new HttpClient();
-
-var clientFactory = new NuGetClientFactory(http, "https://package-source");
-var serviceIndexClient = clientFactory.CreateServiceIndexClient();
-
-var latestClient = new LatestClient(serviceIndexClient, http);
-var latest = await latestClient.GetLatestOrNullAsync("Newtonsoft.Json");
-
-Console.WriteLine($"Latest stable version: {latest.Stable.Version}");
-Console.WriteLine($"Latest stable description: {latest.Stable.Description}");
-```
-
 ## Proposed protocol
 
 ### Versioning
@@ -63,7 +48,7 @@ pre-release | [`catalogEntry` object](https://docs.microsoft.com/nuget/api/regis
 #### Sample request
 
 ```
-GET https://loic001.blob.core.windows.net/latest/newtonsoft.json/latest.json
+GET https://loshar001.azureedge.net/latest/fake/latest.json
 ```
 
 #### Sample response
@@ -105,12 +90,12 @@ If the package source has one or more versions, including unlisted or pre-releas
 
 Name | Type | Required | Notes
 -- | -- | -- | --
-stable | [`catalogEntry` object](https://docs.microsoft.com/nuget/api/registration-base-url-resource#catalog-entry) | No | The metadata for the package's latest stable version, excluding pre-release and unlisted versions, or `null` if the package does not have any stable versions.
+stable | [`catalogEntry` object](https://docs.microsoft.com/nuget/api/registration-base-url-resource#catalog-entry) | No | The metadata for the package's latest stable version, excluding pre-release and unlisted versions, or `null` if the package does not have any listed stable versions.
 
 #### Sample request
 
 ```
-GET https://loic001.blob.core.windows.net/latest/newtonsoft.json/latest-stable.json
+GET https://loshar001.azureedge.net/latest/fake/latest-stable.json
 ```
 
 #### Sample response
@@ -125,12 +110,12 @@ GET https://loic001.blob.core.windows.net/latest/newtonsoft.json/latest-stable.j
 }
 ```
 
-### Latest pre-release version
+### Latest, including pre-release versions
 
 Fetch the metadata for a package's latest version, including pre-release versions but excluding unlisted versions.
 
 ```
-GET {@id}/{LOWER_ID}/latest-stable.json
+GET {@id}/{LOWER_ID}/latest-prerelease.json
 ```
 
 #### Request parameters
@@ -147,12 +132,12 @@ If the package source has one or more versions, including unlisted, a 200 status
 
 Name | Type | Required | Notes
 -- | -- | -- | --
-prerelease | [`catalogEntry` object](https://docs.microsoft.com/nuget/api/registration-base-url-resource#catalog-entry) | No | The metadata for the package's latest version, excluding unlisted versions, or `null` if the package does not have any stable versions.
+prerelease | [`catalogEntry` object](https://docs.microsoft.com/nuget/api/registration-base-url-resource#catalog-entry) | No | The metadata for the package's latest version, excluding unlisted versions, or `null` if the package does not have any listed versions.
 
 #### Sample request
 
 ```
-GET https://loic001.blob.core.windows.net/latest/newtonsoft.json/latest-prerelease.json
+GET https://loshar001.azureedge.net/latest/fake/latest-prerelease.json
 ```
 
 #### Sample response
@@ -166,3 +151,37 @@ GET https://loic001.blob.core.windows.net/latest/newtonsoft.json/latest-prerelea
   }
 }
 ```
+
+## SDK Sample
+
+The project provides a client SDK to interact with the latest resource:
+
+```cs
+using var http = new HttpClient();
+
+var clientFactory = new NuGetClientFactory(http, "https://package-source");
+var serviceIndexClient = clientFactory.CreateServiceIndexClient();
+
+var latestClient = new LatestClient(serviceIndexClient, http);
+var latest = await latestClient.GetLatestOrNullAsync("Newtonsoft.Json");
+
+Console.WriteLine($"Latest stable version: {latest.Stable.Version}");
+Console.WriteLine($"Latest stable description: {latest.Stable.Description}");
+```
+
+<details>
+<summary>⚠ Current SDK is a bit hacky. Ideally usage would look like...</summary>
+
+```cs
+using var http = new HttpClient();
+
+var clientFactory = new NuGetClientFactory(http, "https://package-source");
+var client = clientFactory.CreateLatestClient();
+
+var latest = await latestClient.GetLatestOrNullAsync("Newtonsoft.Json");
+
+Console.WriteLine($"Latest stable version: {latest.Stable.Version}");
+Console.WriteLine($"Latest stable description: {latest.Stable.Description}");
+```
+
+</details>
