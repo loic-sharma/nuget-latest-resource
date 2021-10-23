@@ -96,8 +96,6 @@ namespace NuGet.Jobs.Catalog2Latest
                 });
 
             await Task.WhenAll(tasks);
-
-            _logger.LogInformation("Done processing package metadata.");
         }
 
         private async Task<RegistrationIndexResponse> GetInlinedRegistrationIndexOrNullAsync(

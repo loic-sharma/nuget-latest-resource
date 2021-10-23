@@ -1,21 +1,14 @@
-﻿using System;
-using System.CommandLine;
-using System.CommandLine.Builder;
-using System.CommandLine.Invocation;
-using System.CommandLine.Parsing;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Azure.Identity;
+﻿using Azure.Identity;
 using BaGet.Protocol;
 using BaGet.Protocol.Catalog;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NuGet.Jobs.Catalog2Latest
 {
@@ -23,33 +16,23 @@ namespace NuGet.Jobs.Catalog2Latest
     {
         public static async Task Main(string[] args)
         {
-            var command = new RootCommand();
-            var builder = new CommandLineBuilder(command).UseDefaults();
+            // TODO: NuGetClientFactory should accept a function to create the httpclient
+            // TODO: NuGetClientFactory should have an interface.
+            ThreadPool.SetMinThreads(workerThreads: 32, completionPortThreads: 4);
+            ServicePointManager.DefaultConnectionLimit = 32;
+            ServicePointManager.MaxServicePointIdleTime = 10000;
 
-            command.Description = "Update the NuGet V3 latest resource.";
+            var hostBuilder = Host.CreateDefaultBuilder(args);
 
-            command.Handler = CommandHandler.Create(async () =>
+            try
             {
-                // TODO: NuGetClientFactory should accept a function to create the httpclient
-                // TODO: NuGetClientFactory should have an interface.
-                ThreadPool.SetMinThreads(workerThreads: 32, completionPortThreads: 4);
-                ServicePointManager.DefaultConnectionLimit = 32;
-                ServicePointManager.MaxServicePointIdleTime = 10000;
-
-                var hostBuilder = Host.CreateDefaultBuilder(args);
-
-                try
-                {
-                    await hostBuilder
-                        .ConfigureServices(ConfigureService)
-                        .RunConsoleAsync();
-                }
-                catch (OperationCanceledException)
-                {
-                }
-            });
-
-            await builder.Build().InvokeAsync(args);
+                await hostBuilder
+                    .ConfigureServices(ConfigureService)
+                    .RunConsoleAsync();
+            }
+            catch (OperationCanceledException)
+            {
+            }
         }
 
         private static void ConfigureService(HostBuilderContext ctx, IServiceCollection services)
@@ -89,6 +72,7 @@ namespace NuGet.Jobs.Catalog2Latest
             services.AddSingleton<PackageMetadataWorker>();
             services.AddHttpClient<PackageMetadataCursor>();
 
+            services.AddHostedService<EnsureBlobContainer>();
             services.AddHostedService<Catalog2LatestJob>();
         }
     }

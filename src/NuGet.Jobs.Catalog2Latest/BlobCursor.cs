@@ -25,9 +25,6 @@ namespace NuGet.Jobs.Catalog2Latest
         {
             try
             {
-                // TODO: Move to start up task.
-                await _blobContainer.CreateIfNotExistsAsync(PublicAccessType.Blob, cancellationToken: cancellationToken);
-
                 var response = await _blobContainer.GetBlobClient("cursor.json").DownloadContentAsync(cancellationToken);
 
                 var data = response.Value.Content.ToObjectFromJson<Data>();
@@ -46,7 +43,9 @@ namespace NuGet.Jobs.Catalog2Latest
         {
             var data = BinaryData.FromObjectAsJson(new Data { Value = value });
 
-            await _blobContainer.GetBlobClient("cursor.json").UploadAsync(data);
+            await _blobContainer
+                .GetBlobClient("cursor.json")
+                .UploadAsync(data, overwrite: true, cancellationToken);
 
             _logger.LogDebug("Wrote cursor value {cursor:O}", value);
 
