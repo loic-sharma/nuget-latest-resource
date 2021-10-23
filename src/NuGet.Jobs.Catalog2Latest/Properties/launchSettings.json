@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "nuget-latest": {
+      "commandName": "Project"
+    }
+  }
+}
