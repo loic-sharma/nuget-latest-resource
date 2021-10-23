@@ -1,8 +1,24 @@
 # NuGet V3 latest resource
 
-This prototypes the NuGet V3 "latest" resource to power Visual Studio's "Updates" tab in the Package Manager UI.
+**Goal**: Speed up Visual Studio's Package Manager UI by prototyping new server APIs! 🚀
 
-## Proposed protocol
+## Background
+
+Customers use Visual Studio's Package Manager (PM) UI to browse and install packages. The PM UI displays packages' latest version by default. Today Visual Studio does this using [NuGet V3's package metadata API](https://docs.microsoft.com/nuget/api/registration-base-url-resource). This API has a few flaws:
+
+1. It includes the metadata for all versions of a package.
+1. Packages that with more than 128 versions are split across multiple "pages"
+1. It includes [unlisted versions](https://docs.microsoft.com/en-us/nuget/nuget-org/policies/deleting-packages), which are hidden from the UI.
+
+This makes it difficult for Visual Studio to quickly display packages' latest metadata.
+
+## Performance results
+
+⚠ TODO
+
+## Proposed latest API
+
+Kudos to @nkolev92 for the idea!
 
 ### Versioning
 
