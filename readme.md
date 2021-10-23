@@ -2,6 +2,8 @@
 
 **Goal**: Speed up Visual Studio's Package Manager UI by prototyping new server APIs! 🚀
 
+Kudos to [@nkolev92](https://github.com/nkolev92) for the idea!
+
 ## Background
 
 Customers use Visual Studio's Package Manager (PM) UI to browse and install packages. The PM UI displays packages' latest version by default. Today Visual Studio does this using [NuGet V3's package metadata API](https://docs.microsoft.com/nuget/api/registration-base-url-resource). This API has a few flaws:
@@ -17,8 +19,6 @@ This makes it difficult for Visual Studio to quickly display packages' latest me
 ⚠ TODO
 
 ## Proposed latest API
-
-Kudos to @nkolev92 for the idea!
 
 ### Versioning
 
