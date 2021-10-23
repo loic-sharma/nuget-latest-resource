@@ -18,7 +18,7 @@ This makes it difficult for Visual Studio to quickly display packages' latest me
 
 ### Data
 
-5,510 unique package IDs (~3.4% of total downloads) are affected by registration. Here are the top 10 affected packages:
+5,510 unique package IDs (~3.4% of total downloads) are affected by registration paging. Here are the top 10 affected packages:
 
 Package Id | Versions | Total downloads
 -- | -- | --
@@ -32,6 +32,8 @@ paket | 2,480 | 3,892,159
 hilma.common | 2,451 | 204,900
 uno.ui | 2,466 | 1,096,205
 paket.core | 2,261 | 3,315,729
+
+Browsing these packages in Visual Studio's PM UI may result in freezes or crashes.
 
 ## Performance results
 
